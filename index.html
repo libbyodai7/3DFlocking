@@ -17,13 +17,29 @@
 
 		var mouse = {x: 0, y: 0};
 		var renderer, scene, camera, controls, cube;
-		//var mouseLocation = new THREE.Vector3( 1, 1, 1);
-		//var cubePosition = new THREE.Vector3(0, 0, 0);
+		var mouseLocation = new THREE.Vector3();
+		var mousePos = new THREE.Vector3();
+		var mouseDirection = new THREE.Vector3();
+
+		var maxSpeed = new THREE.Vector3(2, 2, 2);
+		var cubePosition;
+
+
+		var acceleration;
+
+		var velocity;
+
+
 
 		init();
 		animate();
 
 		function init(){
+
+		cubePosition = new THREE.Vector3(1, 1, 1);
+
+
+
 
 		scene = new THREE.Scene();
 		
@@ -45,17 +61,25 @@
 		var material = new THREE.MeshBasicMaterial( { color: 0xf00000 } );
 		cube = new THREE.Mesh( geometry, material );
 
-		var cubePositionX = Math.floor(Math.random() * 17) - 8;
-        var cubePositionY = Math.floor(Math.random() * 17) - 8;
-        var cubePositionZ = Math.floor(Math.random() * 17) - 8;
+		var cubePositionX = 1;
+        var cubePositionY = 1;
+        var cubePositionZ = 5;
 
-        cube.position.set ( cubePositionX, cubePositionY, cubePositionZ );
+        cube.position.set ( cubePositionX, cubePositionY, cubePositionZ);
 
 		scene.add( cube );
+
+		velocity = new THREE.Vector3 (0,0,0);
+
+		acceleration =  new THREE.Vector3 (0.3,0.2,0.2);
+
 
 
 		document.addEventListener('mousemove', onMouseMove, false);
 
+		//cubePosition = cube.position;
+
+		//velocity = new THREE.Vector3(0, 0, 0);
 
 
 		}
@@ -69,7 +93,7 @@
 			mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
  			// Make the sphere follow the mouse
-  			var mouseLocation = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+  			mouseLocation = new THREE.Vector3(mouse.x, mouse.y, mouse.x);
   			var vector = mouseLocation;
 
 
@@ -79,8 +103,8 @@
 			var distance = - camera.position.z / dir.z;
 			
 
-			var pos = camera.position.clone().add( dir.multiplyScalar( distance ) );
-			cube.position.copy(pos);
+			mousePos = camera.position.clone().add( dir.multiplyScalar( distance ) );
+			//cube.position.copy(pos);
 
   			
 
@@ -100,12 +124,64 @@
 
 		function animate(){
 
-		var acceleration = new THREE.V	
+		//console.log(cubePosition);
+		//console.log(cube.position);
 
-		var velocity = new THREE.Vector3(0.1, 0.1, 0.1 );
+		//mousePos.negate();
+
+
+		//console.log(mousePos);
+//
+		mouseDirection.subVectors(mousePos, cube.position);
+
+		mouseDirection.normalize();
+
+		mouseDirection.multiplyScalar(0.2);
+
+		//console.log(mouseDirection);
+
+		acceleration = mouseDirection;
+
+		//console.log(acceleration);
+		
+		velocity.add(acceleration);
+		//console.log(velocity);
+
+		velocity.clampScalar ( -1, 1 );
+		cube.position.add(velocity);
+		
+
+		//console.log(velocity);
+
+	//	
+	//	
+///
+	//	acceleration = mouseDirection;
+//
+
+
+		//velocity.add(acceleration);
+
+	//	cube.position.add(velocity);
+		
+
+	//	var vector = cube.position.add( acceleration );
+
+
+  	//	vector.unproject( camera );
+			
+	//	var dir = vector.sub( camera.position ).normalize();
+	//	var distance = - camera.position.z / dir.z;
+	//		
+
+	//	var pos = camera.position.clone().add( dir.multiplyScalar( distance ) );
+		//cube.position.copy(pos);
+
+		//cubePosition = cube.position;
+
 
   		
-		cube.position.add( velocity );
+		//cube.position.add( velocity );
 
 		cube.rotation.x += 0.01;
 		cube.rotation.y += 0.01;
