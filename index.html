@@ -17,6 +17,8 @@
 
 		var mouse = {x: 0, y: 0};
 		var renderer, scene, camera, controls, cube;
+		//var mouseLocation = new THREE.Vector3( 1, 1, 1);
+		//var cubePosition = new THREE.Vector3(0, 0, 0);
 
 		init();
 		animate();
@@ -67,16 +69,46 @@
 			mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
  			// Make the sphere follow the mouse
-  			var vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
-			vector.unproject( camera );
+  			var mouseLocation = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+  			var vector = mouseLocation;
+
+
+  			vector.unproject( camera );
+			
 			var dir = vector.sub( camera.position ).normalize();
 			var distance = - camera.position.z / dir.z;
+			
+
 			var pos = camera.position.clone().add( dir.multiplyScalar( distance ) );
 			cube.position.copy(pos);
+
+  			
+
+  			/* var velocity = new THREE.Vector3(0.5, 0.5, 0.5);
+
+  			var vector = mouseLocation.add( velocity );
+			vector.unproject( camera );
+			
+			var dir = vector.sub( camera.position ).normalize();
+			var distance = - camera.position.z / dir.z;
+			
+			var pos = camera.position.clone().add( dir.multiplyScalar( distance ) );
+			cube.position.copy(pos);
+			*/
 
 		}
 
 		function animate(){
+
+		var acceleration = new THREE.V	
+
+		var velocity = new THREE.Vector3(0.1, 0.1, 0.1 );
+
+  		
+		cube.position.add( velocity );
+
+		cube.rotation.x += 0.01;
+		cube.rotation.y += 0.01;
 
 
 		requestAnimationFrame(animate);
