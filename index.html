@@ -180,6 +180,22 @@
 
 		velocity.clampScalar ( -1, 1 );
 		cube.position.add(velocity);
+
+		    for (var i = 0; i < cubeArray.length; i++) {
+		    		 
+                    var cubeRandom = Math.floor(Math.random() * 21) - 10;
+                    var cubeMove = (cubeRandom * 0.09) + 1;
+                    var cubeScale = (cubeRandom * 0.01) + 0.02;
+                   
+                    this.cubeArray[i].scale.set (1 + (cubeRandom*0.005), 1 + (cubeRandom*0.005), 1 + (cubeRandom*0.005));
+                    this.cubeArray[i].position.set (this.cubePositionXArray[i] * cubeMove, this.cubePositionYArray[i] * cubeMove, this.cubePositionZArray[i] * cubeMove );
+                    this.cubeArray[i].rotation.set (cubeScale, cubeScale, cubeScale);
+                    
+
+
+
+                    cubeArray[i].position.add(velocity);
+                }
 		
 
 		cube.rotation.x += 0.01;
@@ -192,39 +208,11 @@
 		}
 
 
-		
-/*
-
-		for (var i = 0; i < 10; i++) {
-		var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-		var material = new THREE.MeshBasicMaterial( { color: 0xf00000 } );
-		var cube = new THREE.Mesh( geometry, material );
-
-		var cubePositionX = Math.floor(Math.random() * 17) - 8;
-        var cubePositionY = Math.floor(Math.random() * 17) - 8;
-        var cubePositionZ = Math.floor(Math.random() * 17) - 8;
-
-         cube.position.set ( cubePositionX, cubePositionY, cubePositionZ );
-
-		scene.add( cube );
-
-
-		};
-
-		*/
-
-		
 	
 
-	
-
-
-		function render() {
+function render() {
 		renderer.autoClear = false;
 		renderer.clear();
-
-		//cube.rotation.x += 0.01;
-		//cube.rotation.y += 0.01;
 
 		renderer.render( scene, camera );
 		}
