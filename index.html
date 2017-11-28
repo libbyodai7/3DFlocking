@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset=utf-8>
-		<title>My first three.js app</title>
+		<title>Flocking</title>
 		<style>
 			body { margin: 0; }
 			canvas { width: 100%; height: 100% }
@@ -15,6 +15,8 @@
 
 		<script>
 
+
+		//mouse init
 		var mouse = {x: 0, y: 0};
 		var renderer, scene, camera, controls, cube;
 		var mouseLocation = new THREE.Vector3();
@@ -36,26 +38,79 @@
 
 		function init(){
 
+       
+
 		cubePosition = new THREE.Vector3(1, 1, 1);
 
 
-
-
+		//init Scene
 		scene = new THREE.Scene();
 		
+		//init Camera
 		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 		camera.position.set(0, 0, 10);
         camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 		
-
+        //init Controls
 		controls = new THREE.OrbitControls( camera );
 		controls.enableZoom = true;
   		controls.addEventListener( 'change', render );
 
+  		//init Renderer
 		renderer = new THREE.WebGLRenderer();
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		document.body.appendChild( renderer.domElement );
+
+		//init Cube Array
+		group = new THREE.Group();
+		cubeGroup = new THREE.Group();
+		scene.add( this.cubeGroup);
+
+		 //PIVOT
+            this.pivot = new THREE.Object3D();
+            this.pivot.position.set(0, 0, 0);
+            this.pivot.add(this.cubeGroup);
+            this.scene.add(this.pivot)
+
+
+		    //Cube Arrays
+            cubeArray = [];
+            cubePositionXArray = [];
+            cubePositionYArray = [];
+            cubePositionZArray = [];
+
+           //make Cubes
+           makeCube = function(x, y, z, color)
+        {
+            var cubeGeometry = new THREE.BoxGeometry( 1, 1 , 1);
+            var material = new THREE.MeshBasicMaterial({ color: 0xf00000});
+            var cube = new THREE.Mesh( cubeGeometry, material);
+            cube.position.set ( x, y, z );
+            cube.scale.set (1, 1, 1 );
+            cubeGroup.add(cube);
+            cubeArray.push(cube);
+        }
+
+
+         // make cubes
+            //Call list of cubes in random places
+            
+            for (var i = 0; i < 100; i++){
+                var cubePositionX = Math.floor(Math.random() * 10) - 8;
+                var cubePositionY = Math.floor(Math.random() * 10) - 8;
+                var cubePositionZ = Math.floor(Math.random() * 10) - 8;
+                this.makeCube(cubePositionX, cubePositionY, cubePositionZ, this.cubeColor);
+                this.cubePositionXArray.push(cubePositionX);
+                this.cubePositionYArray.push(cubePositionY);
+                this.cubePositionZArray.push(cubePositionZ);
+                console.log('cube made');
+            }
+
+           
+
+
+
 
 		var geometry = new THREE.BoxGeometry( 1, 1, 1 );
 		var material = new THREE.MeshBasicMaterial( { color: 0xf00000 } );
@@ -67,6 +122,8 @@
 
         cube.position.set ( cubePositionX, cubePositionY, cubePositionZ);
 
+        scene.add( cubeGroup);
+
 		scene.add( cube );
 
 		velocity = new THREE.Vector3 (0,0,0);
@@ -77,9 +134,6 @@
 
 		document.addEventListener('mousemove', onMouseMove, false);
 
-		//cubePosition = cube.position;
-
-		//velocity = new THREE.Vector3(0, 0, 0);
 
 
 		}
@@ -104,84 +158,29 @@
 			
 
 			mousePos = camera.position.clone().add( dir.multiplyScalar( distance ) );
-			//cube.position.copy(pos);
-
-  			
-
-  			/* var velocity = new THREE.Vector3(0.5, 0.5, 0.5);
-
-  			var vector = mouseLocation.add( velocity );
-			vector.unproject( camera );
-			
-			var dir = vector.sub( camera.position ).normalize();
-			var distance = - camera.position.z / dir.z;
-			
-			var pos = camera.position.clone().add( dir.multiplyScalar( distance ) );
-			cube.position.copy(pos);
-			*/
+	
 
 		}
 
 		function animate(){
 
-		//console.log(cubePosition);
-		//console.log(cube.position);
-
-		//mousePos.negate();
-
-
-		//console.log(mousePos);
-//
+		
 		mouseDirection.subVectors(mousePos, cube.position);
 
 		mouseDirection.normalize();
 
 		mouseDirection.multiplyScalar(0.2);
 
-		//console.log(mouseDirection);
 
 		acceleration = mouseDirection;
 
-		//console.log(acceleration);
 		
 		velocity.add(acceleration);
-		//console.log(velocity);
+
 
 		velocity.clampScalar ( -1, 1 );
 		cube.position.add(velocity);
 		
-
-		//console.log(velocity);
-
-	//	
-	//	
-///
-	//	acceleration = mouseDirection;
-//
-
-
-		//velocity.add(acceleration);
-
-	//	cube.position.add(velocity);
-		
-
-	//	var vector = cube.position.add( acceleration );
-
-
-  	//	vector.unproject( camera );
-			
-	//	var dir = vector.sub( camera.position ).normalize();
-	//	var distance = - camera.position.z / dir.z;
-	//		
-
-	//	var pos = camera.position.clone().add( dir.multiplyScalar( distance ) );
-		//cube.position.copy(pos);
-
-		//cubePosition = cube.position;
-
-
-  		
-		//cube.position.add( velocity );
 
 		cube.rotation.x += 0.01;
 		cube.rotation.y += 0.01;
