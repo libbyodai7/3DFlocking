@@ -3,6 +3,8 @@
 	<head>
 		<meta charset=utf-8>
 		<title>Flocking</title>
+  		<link rel="stylesheet" href="css/demo.css">
+
 
 		<script src="js/three.min.js"></script>
 		<script src="js/OrbitControls.js"></script>
@@ -10,12 +12,18 @@
 		<scrpt src ="js/face-min.js"></script>
 		<style>
 			body { margin: 0; }
-			canvas { width: 100%; height: 100% }
+			video, canvas { width: 100%; height: 100% }
 		</style>
 	</head>
 	<body>
-		
-		
+
+		<div class="demo-frame">
+    <div class="demo-container">
+      <video id="video" width="320" height="240" preload autoplay loop muted></video>
+      <canvas id="canvas" width="320" height="240"></canvas>
+    </div>
+  </div>
+
 
 		<script>
 
